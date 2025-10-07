@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — EVA911</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="/"><span class="brand-accent">EVA</span>911</a>
+      <nav class="nav">
+        <a class="active" href="/about.html">About</a>
+        <a href="/demo.html">Live Demo</a>
+        <a class="btn btn-ghost" href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container content">
+    <h1>About EVA911</h1>
+    <p><strong>EVA911</strong> is a lightweight safety system that helps emergency vehicles warn nearby drivers in real time. We integrate with navigation apps drivers already use, starting with Waze, so departments can pilot quickly without asking the public to install a new app.</p>
+
+    <h2>Why we built this</h2>
+    <p>Intersections are the most dangerous seconds of a response. EVA911 reduces surprises by giving civilians a clear, timely warning that an emergency vehicle is approaching.</p>
+
+    <h2>Key capabilities</h2>
+    <ul class="checklist">
+      <li>Waze‑compatible incident feed</li>
+      <li>Truck tablet app (Android) for reliable GPS streaming</li>
+      <li>Moving, route‑aware geofences with tunable radii</li>
+      <li>Dispatch UI: Send / Accept / Cancel with audit log</li>
+      <li>Metrics: seconds saved per corridor, delivered alert latency, false‑positive rate</li>
+      <li>Privacy: no persistent civilian tracking or location storage</li>
+    </ul>
+
+    <h2>Roadmap</h2>
+    <ol class="steps">
+      <li>Ontario pilot corridors (3–6 months)</li>
+      <li>iOS/Android consumer app (optional) to expand coverage</li>
+      <li>Telematics integrations (Geotab/Samsara) for fleets</li>
+      <li>AAOS demo and C‑V2X exploration with partners</li>
+    </ol>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year2"></span> EVA911</div>
+      <div class="footer-links">
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+  <script>document.getElementById('year2').textContent = new Date().getFullYear();</script>
+</body>
+</html>

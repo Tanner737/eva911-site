@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EVA911 — Emergency Vehicle Alerts</title>
+  <meta name="description" content="EVA911 helps fire and EMS alert nearby drivers in real time using Waze integrations and smart geofencing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="/assets/favicon.ico" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="/"><span class="brand-accent">EVA</span>911</a>
+      <nav class="nav">
+        <a href="/about.html">About</a>
+        <a href="/demo.html">Live Demo</a>
+        <a class="btn btn-ghost" href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>Faster, safer response with <span class="brand">EVA911</span></h1>
+      <p class="subtitle">EVA911 helps Fire/EMS alert nearby drivers in real time — using Waze integrations, server‑side geofencing, and clear on‑screen warnings. No new hardware in civilian cars required.</p>
+      <div class="cta-row">
+        <a class="btn" href="/demo.html">See the live demo</a>
+        <a class="btn btn-ghost" href="/contact.html">Talk to us</a>
+      </div>
+      <ul class="badges">
+        <li>Ontario‑based</li>
+        <li>Waze‑compatible feed</li>
+        <li>Privacy‑first</li>
+      </ul>
+    </section>
+
+    <section class="container grid two">
+      <div>
+        <h2>What makes EVA special</h2>
+        <ul class="checklist">
+          <li><strong>App‑optional alerts:</strong> Drivers can receive warnings in apps they already use (Waze). No mass app install campaign needed.</li>
+          <li><strong>Fast to deploy:</strong> Truck‑mounted Android tablet + our cloud back‑end. No OEM car integrations required for pilots.</li>
+          <li><strong>Smart geofencing:</strong> Moving, route‑aware geofences cut false alerts and focus only on affected drivers.</li>
+          <li><strong>Privacy by design:</strong> We alert devices — we don’t track civilians. No personal location is stored.</li>
+          <li><strong>Department‑friendly:</strong> Simple dispatch workflow (Send / Accept / Cancel) with audit logs and metrics.</li>
+          <li><strong>Measurable impact:</strong> Capture seconds saved at key intersections and increased yielding rates.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card">
+          <h3>How it works (60 seconds)</h3>
+          <ol class="steps">
+            <li>Dispatch sends a route. The truck taps <em>Accept</em>.</li>
+            <li>The truck streams GPS; EVA creates a moving alert zone ahead of it.</li>
+            <li>Waze users in the zone see an on‑screen warning to yield.</li>
+            <li>After pass‑by, alerts clear. Metrics log automatically.</li>
+          </ol>
+          <a class="btn block" href="/about.html">Learn more</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container card highlight">
+      <h2>Built for Canadian departments</h2>
+      <p>EVA911 is developed in Ontario, aligns with Canadian privacy expectations, and is designed to pilot quickly with municipal Fire/EMS. Start with a corridor, scale city‑wide.</p>
+      <div class="cta-row">
+        <a class="btn" href="/contact.html">Start a pilot</a>
+        <a class="btn btn-ghost" href="/demo.html">View demo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> EVA911 — Emergency Vehicle Alerts</div>
+      <div class="footer-links">
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
