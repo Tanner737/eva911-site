@@ -1,91 +1,787 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EVA911 — Emergency Vehicle Alerts</title>
-  <meta name="description" content="EVA911 helps fire and EMS alert nearby drivers in real time using Waze integrations and smart geofencing." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="icon" href="/assets/favicon.ico" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVA911 – Emergency Vehicle Assistant</title>
+  <meta name="description" content="EVA911 is a public-safety platform that warns civilian drivers about approaching emergency vehicles and helps responders reach scenes faster and safer." />
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --bg-card: #ffffff;
+      --primary: #0c2e8a;
+      --primary-soft: #e2ebff;
+      --accent: #ff3b3b;
+      --text-main: #1e2430;
+      --text-muted: #6b7280;
+      --border-soft: #e2e4ec;
+      --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition-fast: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e4edff, #f7f9fc 45%, #eef2ff 90%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Layout */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(245, 247, 251, 0.9);
+      border-bottom: 1px solid rgba(226, 228, 236, 0.9);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: radial-gradient(circle at 30% 20%, #ff7777, #b10000 55%, #4b0b0b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 0.85rem;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      padding: 6px 0;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-cta {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: #fff;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .nav-cta:hover {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(12, 46, 138, 0.25);
+      transform: translateY(-1px);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    /* Hero */
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: center;
+      padding: 26px 20px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, #ffffff 0%, #f3f6ff 55%, #e2eaff 100%);
+      box-shadow: var(--shadow-soft);
+      margin-top: 12px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(12, 46, 138, 0.06);
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.0rem, 3vw + 1rem, 2.8rem);
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero-sub {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 22px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 11px 18px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-fast);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(15, 23, 42, 0.32);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--primary);
+      border: 1px solid rgba(12, 46, 138, 0.25);
+    }
+
+    .btn-ghost:hover {
+      background: #fff;
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .hero-note {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .hero-note strong {
+      color: var(--primary);
+    }
+
+    .hero-visual {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top, #ffeded, #f5f7ff 55%, #dde8ff 100%);
+      padding: 18px;
+      border: 1px solid rgba(226, 228, 236, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mini-pill {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #0f172a;
+      color: #e5e7eb;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.97;
+    }
+
+    .mini-pill span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(248, 250, 252, 0.12);
+      font-size: 0.65rem;
+    }
+
+    .hero-map {
+      border-radius: 16px;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 12px;
+      font-size: 0.78rem;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 10px;
+    }
+
+    .hero-map-main {
+      border-radius: 12px;
+      background-image: linear-gradient(135deg, #1f2937 0%, #020617 65%, #111827 100%);
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-road {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      top: 40%;
+      height: 40px;
+      background: linear-gradient(90deg, #020617 0%, #0b1120 80%, #1e293b 100%);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .hero-road::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      top: 50%;
+      height: 4px;
+      background: repeating-linear-gradient(90deg, #facc15 0 12px, transparent 12px 18px);
+      transform: translateY(-50%);
+      opacity: 0.9;
+    }
+
+    .icon-truck,
+    .icon-car {
+      position: absolute;
+      top: 48%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #fff;
+    }
+
+    .icon-truck {
+      left: 22%;
+      background: #ef4444;
+      box-shadow: 0 0 18px rgba(248, 113, 113, 0.9);
+    }
+
+    .icon-car {
+      right: 20%;
+      background: #0ea5e9;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
+    }
+
+    .alert-bubble {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.15);
+      color: #fee2e2;
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(248, 113, 113, 0.7);
+    }
+
+    .alert-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f97316;
+    }
+
+    .hero-map-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .status-pill {
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-pill span {
+      font-size: 0.72rem;
+    }
+
+    .status-pill strong {
+      font-size: 0.78rem;
+      color: #e5e7eb;
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.16);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.7);
+    }
+
+    .status-badge.red {
+      background: rgba(248, 113, 113, 0.18);
+      color: #fee2e2;
+      border-color: rgba(248, 113, 113, 0.9);
+    }
+
+    .hero-footnote {
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    /* Sections */
+
+    section {
+      margin-top: 40px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+
+    .section-heading p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 6px 18px rgba(148, 163, 184, 0.18);
+    }
+
+    .feature-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .feature-pill {
+      display: inline-block;
+      font-size: 0.78rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      margin-top: 8px;
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 12px;
+    }
+
+    .step {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .step h3 {
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+    }
+
+    .step p {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+    }
+
+    /* Contact */
+
+    .contact-card {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px 18px 18px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 22px rgba(148, 163, 184, 0.20);
+      text-align: left;
+    }
+
+    .contact-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .contact-line {
+      font-size: 0.95rem;
+    }
+
+    .contact-label {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .contact-link {
+      color: var(--primary);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    footer {
+      padding: 20px;
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 20px 16px;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-inner {
+        justify-content: space-between;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="container header-row">
-      <a class="brand" href="/"><span class="brand-accent">EVA</span>911</a>
-      <nav class="nav">
-        <a href="/about.html">About</a>
-        <a href="/demo.html">Live Demo</a>
-        <a class="btn btn-ghost" href="/contact.html">Contact</a>
-      </nav>
+
+<header>
+  <div class="nav-inner">
+    <div class="logo-text">
+      <div class="logo-mark">E</div>
+      <span>EVA911</span>
     </div>
-  </header>
+    <nav class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#who-its-for">Who it’s for</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+      Talk to us
+    </button>
+  </div>
+</header>
 
-  <main>
-    <section class="hero container">
-      <h1>Faster, safer response with <span class="brand">EVA911</span></h1>
-      <p class="subtitle">EVA911 helps Fire/EMS alert nearby drivers in real time — using Waze integrations, server‑side geofencing, and clear on‑screen warnings. No new hardware in civilian cars required.</p>
-      <div class="cta-row">
-        <a class="btn" href="/demo.html">See the live demo</a>
-        <a class="btn btn-ghost" href="/contact.html">Talk to us</a>
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Waze for Cities Partner – Canada
       </div>
-      <ul class="badges">
-        <li>Ontario‑based</li>
-        <li>Waze‑compatible feed</li>
-        <li>Privacy‑first</li>
-      </ul>
-    </section>
+      <h1>
+        Smarter warnings for <span>emergency vehicles</span> and civilian drivers.
+      </h1>
+      <p class="hero-sub">
+        EVA911 is a public-safety platform that uses real-time GPS, routing, and 
+        upcoming Waze integration to warn drivers when fire trucks and emergency
+        vehicles are approaching – reducing intersection collisions and helping
+        responders arrive faster.
+      </p>
 
-    <section class="container grid two">
-      <div>
-        <h2>What makes EVA special</h2>
-        <ul class="checklist">
-          <li><strong>App‑optional alerts:</strong> Drivers can receive warnings in apps they already use (Waze). No mass app install campaign needed.</li>
-          <li><strong>Fast to deploy:</strong> Truck‑mounted Android tablet + our cloud back‑end. No OEM car integrations required for pilots.</li>
-          <li><strong>Smart geofencing:</strong> Moving, route‑aware geofences cut false alerts and focus only on affected drivers.</li>
-          <li><strong>Privacy by design:</strong> We alert devices — we don’t track civilians. No personal location is stored.</li>
-          <li><strong>Department‑friendly:</strong> Simple dispatch workflow (Send / Accept / Cancel) with audit logs and metrics.</li>
-          <li><strong>Measurable impact:</strong> Capture seconds saved at key intersections and increased yielding rates.</li>
-        </ul>
+      <div class="hero-cta-row">
+        <button class="btn-primary" onclick="document.getElementById('who-its-for').scrollIntoView({behavior:'smooth'})">
+          For fire departments & cities
+        </button>
+        <button class="btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">
+          See how EVA911 works
+        </button>
       </div>
-      <div>
-        <div class="card">
-          <h3>How it works (60 seconds)</h3>
-          <ol class="steps">
-            <li>Dispatch sends a route. The truck taps <em>Accept</em>.</li>
-            <li>The truck streams GPS; EVA creates a moving alert zone ahead of it.</li>
-            <li>Waze users in the zone see an on‑screen warning to yield.</li>
-            <li>After pass‑by, alerts clear. Metrics log automatically.</li>
-          </ol>
-          <a class="btn block" href="/about.html">Learn more</a>
+
+      <div class="hero-note">
+        <strong>Status:</strong> Prototype in development with planned pilot testing in Ontario.
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="mini-pill">
+        <span>●</span>
+        Live route view
+      </div>
+
+      <div class="hero-map">
+        <div class="hero-map-main">
+          <div class="hero-road"></div>
+          <div class="alert-bubble">
+            <span class="alert-dot"></span>
+            Emergency vehicle 350 m behind
+          </div>
+          <div class="icon-truck">🚒</div>
+          <div class="icon-car">🚗</div>
+          <div class="hero-footnote">EVA911 concept visualization – not live data</div>
+        </div>
+
+        <div class="hero-map-sidebar">
+          <div class="status-pill">
+            <span>Truck-3</span>
+            <strong>En route</strong>
+            <span class="status-badge">ETA 4:32</span>
+          </div>
+          <div class="status-pill">
+            <span>Civilian ahead</span>
+            <strong>Alert sent</strong>
+            <span class="status-badge red">RED</span>
+          </div>
+          <div class="status-pill">
+            <span>Intersection risk</span>
+            <strong>High</strong>
+            <span class="status-badge red">SLOW</span>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="container card highlight">
-      <h2>Built for Canadian departments</h2>
-      <p>EVA911 is developed in Ontario, aligns with Canadian privacy expectations, and is designed to pilot quickly with municipal Fire/EMS. Start with a corridor, scale city‑wide.</p>
-      <div class="cta-row">
-        <a class="btn" href="/contact.html">Start a pilot</a>
-        <a class="btn btn-ghost" href="/demo.html">View demo</a>
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works">
+    <div class="section-heading">
+      <h2>How EVA911 Works</h2>
+      <p>Connecting emergency vehicles, navigation apps, and civilian drivers to cut seconds off response time and reduce collisions.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Emergency vehicle position</h3>
+        <p>
+          Fire trucks and other emergency vehicles share live GPS and route data
+          through EVA911, with planned integration to the Waze Transport SDK for
+          accurate, road-matched positioning.
+        </p>
       </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-row">
-      <div>© <span id="year"></span> EVA911 — Emergency Vehicle Alerts</div>
-      <div class="footer-links">
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Smart proximity logic</h3>
+        <p>
+          EVA911 calculates which drivers are directly on the route – not just 
+          “nearby” – and determines when alerts are actually needed.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Driver alerts</h3>
+        <p>
+          Drivers receive clear warnings (through EVA911 and, in future, Waze) 
+          to slow down, yield, or clear the lane, improving safety at intersections 
+          and chokepoints.
+        </p>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <!-- WHO IT'S FOR -->
+  <section id="who-its-for">
+    <div class="section-heading">
+      <h2>Built for Departments, Cities & Drivers</h2>
+      <p>EVA911 focuses on road safety for everyone involved in an emergency response.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-label">Fire & EMS</div>
+        <h3>Safer, faster responses</h3>
+        <p>
+          Reduce the risk of intersection collisions, especially during code 3 
+          responses. EVA911 helps drivers ahead of the apparatus understand 
+          what’s coming and react earlier.
+        </p>
+        <span class="feature-pill">Fewer close calls</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-label">Cities & traffic teams</div>
+        <h3>Modern V2V safety layer</h3>
+        <p>
+          EVA911 complements existing pre-emption and traffic systems by adding
+          an in-vehicle warning layer for civilian drivers, using real maps
+          and real routes instead of guesswork.
+        </p>
+        <span class="feature-pill">Works alongside existing tools</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-label">Drivers & the public</div>
+        <h3>Clear alerts, less panic</h3>
+        <p>
+          Instead of hearing a siren and wondering where it’s coming from,
+          drivers get timely, directional alerts so they can make safer choices
+          without panic stops.
+        </p>
+        <span class="feature-pill">Easy to understand alerts</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-heading">
+      <h2>Interested in pilots or collaboration?</h2>
+      <p>We’re actively exploring partnerships with fire departments, municipalities, and technology providers.</p>
+    </div>
+
+    <div class="contact-card">
+      <p>
+        EVA911 is currently in active development, with a focus on real-world
+        testing in Canadian jurisdictions. If you’re interested in learning more,
+        participating in a pilot, or partnering on integration, please reach out.
+      </p>
+
+      <p class="contact-line">
+        <span class="contact-label">Contact:</span>
+        Tanner Green – Founder & Developer
+      </p>
+      <p class="contact-line">
+        <span class="contact-label">Email:</span>
+        <a class="contact-link" href="mailto:tannergreen737@gmail.com">tannergreen737@gmail.com</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> EVA911 – Emergency Vehicle Assistant · Built in Canada for safer emergency responses.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
+
